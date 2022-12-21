@@ -167,6 +167,8 @@ Desplegar aplicaciones en la nube tiene varias ventajas:
   + Se crean dos repositorios:
     + Se crea el repositorio Docker "app-clasificador-qa".
     + Se crea el repositorio Docker "app-clasificador-prod".
+    + Se ingresa en Cloud Shell (CLI de gcloud) y se ejecuta el comando: `gcloud auth configure-docker us-central1-docker.pkg.dev`. Esto es necesario para configurar el auxiliar de credenciales para el dominio de Artifact Registry asociado a la ubicación de este repositorio.
+      + Si no se realiza este paso, entonces no se publicarán las imagenes docker.
 + Se ingresa en `Cloud Build`:
   + Se ingresa en `Activadores/Triggers` y se escoge una región.
   + Se crea un `activador` (disparador/trigger) nombrado "activador-qa-pull-request".
@@ -174,5 +176,8 @@ Desplegar aplicaciones en la nube tiene varias ventajas:
     + Se asigna el evento "Solicitud de extracción" para ejecutar durante el "pull request".
     + Se asigna en "Rama base" el valor "^qa$", para activar la compilación automática durante los Pull request de la rama.
     + Se asgina "Ubicación del archivo de configuración de Cloud Build" el valor de `gcp-cloudbuild-qa.yaml`.
+    + Al enviar un Pull request de la rama "Development" a la rama "qa" se generará el deploy automático:
+    + [![](https://url.jpg "Pull request en despliegue automático.")
+    + [![](https://url.jpg "Aprobación en Cloud Build.")
 
 > Nota: Se recomienda usar la misma región para todos los despliegues en nube. Este tutorial por default fue hecho en "us-central1", si se cambia se deberá modificar los archivos `gcp-cloudbuild-qa.yaml` y `gcp-cloudbuild-prod.yaml`.
