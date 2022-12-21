@@ -152,7 +152,7 @@ Desplegar aplicaciones en la nube tiene varias ventajas:
   + Para más información leer: https://cloud.google.com/build/docs
 + Se activa el API de `Artifac registry`:
   + La capa gratuita de GCP solo inicia su cobro a partir de 0.5 Gigabyte (500 MB) al mes con un valor de 0.1 USD cada 500 MB.
-    + Una imagen Docker de 5 GB tiene un precio de 2 USD/mes.
+    + Una imagen Docker de 2.5 GB tiene un precio de 1 USD/mes.
   + Para más información leer: https://cloud.google.com/artifact-registry/docs
 + Se activa el API de `Cloud Run`:
   + La capa gratuita ofrece:
@@ -163,8 +163,13 @@ Desplegar aplicaciones en la nube tiene varias ventajas:
   + Para más información leer: https://cloud.google.com/run/docs
 
 ### Crear un despliegue continuo en Cloud Build:
-+ Se ingresa en `Cloud Build`.
-+ Se ingresa en `Activadores/Triggers` y se escoge una región.
-> Nota: Se recomienda usar la misma región para todos los despliegues en nube. Se requiere configuración adicional entre regiones.
-+ Se crea un `activador` (disparador/trigger) nombrado "activador-qa-pull-request".
-  + Este activador se ejecutará cada vez que nuestro proyecto git se le asigne un pull request de la rama de "qa".
++ Se ingresa en `Artifact Registry`:
+  + Se crean dos repositorios:
+    + Se crea el repositorio Docker "app-clasificador-qa".
+    + Se crea el repositorio Docker "app-clasificador-prod".
++ Se ingresa en `Cloud Build`:
+  + Se ingresa en `Activadores/Triggers` y se escoge una región.
+  + Se crea un `activador` (disparador/trigger) nombrado "activador-qa-pull-request".
+    + Este activador se ejecutará cada vez que nuestro proyecto git se le asigne un pull request a la rama de "qa".
+
+> Nota: Se recomienda usar la misma región para todos los despliegues en nube. Este tutorial por default fue hecho en "us-central1", si se cambia se deberá modificar los archivos `gcp-cloudbuild-qa.yaml` y `gcp-cloudbuild-prod.yaml`.

@@ -27,7 +27,7 @@ steps:
       'image',
       'tag',
       'app_clasificadora',
-      'us-central1-docker.pkg.dev/${PROJECT_ID}/app-clasificador-dev/app_clasificadora:$COMMIT_SHA'
+      'us-central1-docker.pkg.dev/${PROJECT_ID}/app-clasificador-qa/app_clasificadora:$COMMIT_SHA'
     ]
   # PUSH = Enviar/Publicar
   # El comando "Docker push" se utiliza para publicar una imagen de Docker
@@ -40,5 +40,19 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: [
       'push',
-      'us-central1-docker.pkg.dev/${PROJECT_ID}/app-clasificador-dev/app_clasificadora:$COMMIT_SHA'
+      'us-central1-docker.pkg.dev/${PROJECT_ID}/app-clasificador-qa/app_clasificadora:$COMMIT_SHA'
+    ]
+  # Se desplegará la API en Cloud run en la región "us-central1".
+  # La imagen de la aplicación se obtiene de la imagen previamente publicada.
+  # El parámetro "--allow-unauthenticated" indica que la aplicación podrá ser
+  # accedida por cualquier usuario sin necesidad de autenticación.
+  # Nota: "--allow-unauthenticated" es un riesgo de seguridad, y solo es
+  # usado por motivos educativos.
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args: [
+      'run', 'deploy', 'app_clasificadora_qa',
+      '--image', 'us-central1-docker.pkg.dev/${PROJECT_ID}/app-clasificador-qa/app_clasificadora:$COMMIT_SHA',
+      '--region', 'us-central1',
+      '--allow-unauthenticated'
     ]
