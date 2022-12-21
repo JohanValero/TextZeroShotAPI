@@ -24,6 +24,9 @@ gCandidateLabels = ["insulto", "enojado", "negativo", "queja"]
 # con el clasificador.
 gHypothesysTemplate = "Esta reseña es {}." 
 
+# Máxima calificación a ser otenida por una
+# evaluación de reseña.
+gMaxScore = 0.4
 
 # Se obtiene el valor del puerto a utilizar para la aplicación
 # web desde una variable de entorno.
@@ -69,7 +72,7 @@ def clasifica_texto():
     vFlag = verify_text(
         vInputText,
         gClassifier,
-        0.4
+        gMaxScore
     )
     
     # Se construye la respuesta JSON.

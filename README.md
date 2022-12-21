@@ -1,3 +1,5 @@
+# Objetivo del repositorio
+
 # TextZeroShotAPI
 Una aplicación de clasificación de texto en Python que utiliza la librería transformers y un modelo de lenguaje previamente entrenado llamado "Recognai/bert-base-spanish-wwm-cased-xnli" para clasificar reseñas como positivas o negativas. Que se despliega en despliegue continuo en Google Cloud Plataform (GCP).
 
@@ -95,7 +97,8 @@ git clone https://github.com/JohanValero/TextZeroShotAPI.git
 ```
 > Nota: Se asume que se ha instalado git en el equipo.
 
-Para crear un repositorio git debes ejecutar los siguientes comandos:
+Para crear su propio repositorio git debes ejecutar los siguientes comandos, después de creado un proyecto Git:
+
 ```
 git init
 git add .
@@ -104,6 +107,20 @@ git branch -M main
 git remote add origin https://github.com/{GitUser}/{ProjectName}.git
 git push -u origin main
 ```
+En un proyecto de software que utiliza Git, es común utilizar varias ramas para organizar el código y el desarrollo. Algunas ramas que suelen utilizarse son:
++ Producción: es la rama principal del proyecto y contiene el código que se encuentra en producción. Es importante mantener esta rama estable y libre de errores, por lo que solo se deben realizar cambios cuidadosamente probados y validados.
++ Calidad: es una rama donde se realizan pruebas y validaciones antes de integrar el código a la rama de producción. Esta rama se utiliza para asegurar que el código cumpla con los estándares de calidad y no tenga errores.
++ Desarrollo: es una rama donde se integran y proban los cambios realizados por los desarrolladores. Esta rama se utiliza como un lugar de integración para validar que los cambios realizados por diferentes desarrolladores funcionen correctamente juntos.
++ Ramas de desarrollo por desarrollador o historia de usuario: son ramas creadas por los desarrolladores para trabajar en una historia de usuario o una tarea específica. Una vez que el trabajo está completo, estas ramas se integran a la rama de desarrollo para ser probadas y validadas.
+
+En resumen, esta estructura de ramas permite separar el código en diferentes etapas de desarrollo y validación, lo que facilita la colaboración entre los desarrolladores y mejora la calidad del código.
+
+Este proyecto tiene la siguiente estructura de ramas(branchs):
++ main: rama de producción.
+  + qa: rama de calidad.
+    + development: rama de desarrollo.
+      + dev-x: rama personal de desarrollo.
+
 ## ¿Qué es CI/CD?
 CI/CD (Continuous Integration / Continuous Deployment) es una práctica de desarrollo de software que se enfoca en automatizar y optimizar el proceso de integración y despliegue de código en entornos de producción.
 
@@ -129,11 +146,38 @@ Desplegar aplicaciones en la nube tiene varias ventajas:
 + Se crea una cuenta en la nube de GCP.
   + Esta nube da la ventaja de ofrecer una capa gratuita diaria y/o mensual.
   + Para más información de como gestionar proyectos: https://cloud.google.com/resource-manager/docs/creating-managing-projects
-+ Se activa el API de Cloud Build:
++ Se activa el API de `Cloud Build`:
   + La capa gratuita de GCP solo inicia su cobro después de 120 minutos de despliegue al día.
   + El cobro es de USD 0.003 por mínuto / 4.32 USD por día (después de los 120 minutos de la capa gratuita).
-  + Para más información leer: https://cloud.google.com/build/docs/deploying-builds/deploy-cloud-run
-+ Crear un despliegue en Cloud Build:
-  + Se ingresa en "Cloud Build" en GCP.
-  + Se ingresa en "Activadores/Triggers".
-  + Se crea un 
+  + Para más información leer: https://cloud.google.com/build/docs
++ Se activa el API de `Artifac registry`:
+  + La capa gratuita de GCP solo inicia su cobro a partir de 0.5 Gigabyte (500 MB) al mes con un valor de 0.1 USD cada 500 MB.
+    + Una imagen Docker de 2.5 GB tiene un precio de 1 USD/mes.
+  + Para más información leer: https://cloud.google.com/artifact-registry/docs
++ Se activa el API de `Cloud Run`:
+  + La capa gratuita ofrece:
+    + Las primeras 5 horas de procesamiento.
+    + Las primeras 360.000 GiB de memoria ram por segundo.
+      + Si tu aplicación usa 500 MB de ram, entonces tienes 60 horas de memoria gratuitos.
+    + 2 millones de solicitudes gratutitas al mes.
+  + Para más información leer: https://cloud.google.com/run/docs
+
+### Crear un despliegue continuo en Cloud Build:
++ Se ingresa en `Artifact Registry`:
+  + Se crean dos repositorios:
+    + Se crea el repositorio Docker "app-clasificador-qa".
+    + Se crea el repositorio Docker "app-clasificador-prod".
+    + Se ingresa en Cloud Shell (CLI de gcloud) y se ejecuta el comando: `gcloud auth configure-docker us-central1-docker.pkg.dev`. Esto es necesario para configurar el auxiliar de credenciales para el dominio de Artifact Registry asociado a la ubicación de este repositorio.
+      + Si no se realiza este paso, entonces no se publicarán las imagenes docker.
++ Se ingresa en `Cloud Build`:
+  + Se ingresa en `Activadores/Triggers` y se escoge una región.
+  + Se crea un `activador` (disparador/trigger) nombrado "activador-qa-pull-request".
+    + Se recomienda activar "Solicitar aprobación antes de que se ejecute la compilación" si no se busca una automatización total.
+    + Se asigna el evento "Solicitud de extracción" para ejecutar durante el "pull request".
+    + Se asigna en "Rama base" el valor "^qa$", para activar la compilación automática durante los Pull request de la rama.
+    + Se asgina "Ubicación del archivo de configuración de Cloud Build" el valor de `gcp-cloudbuild-qa.yaml`.
+    + Al enviar un Pull request de la rama "Development" a la rama "qa" se generará el deploy automático:
+    + ![](https://raw.githubusercontent.com/JohanValero/TextZeroShotAPI/development/resources/Pull%20request%20pendiente%20dev2qa.PNG "Pull request en despliegue automático.")
+    + ![](https://raw.githubusercontent.com/JohanValero/TextZeroShotAPI/development/resources/Pull%20request%20aprobaci%C3%B3n%20pendiente%20dev2qa.PNG "Aprobación en Cloud Build.")
+
+> Nota: Se recomienda usar la misma región para todos los despliegues en nube. Este tutorial por default fue hecho en "us-central1", si se cambia se deberá modificar los archivos `gcp-cloudbuild-qa.yaml` y `gcp-cloudbuild-prod.yaml`.
