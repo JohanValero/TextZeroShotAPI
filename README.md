@@ -95,7 +95,7 @@ git clone https://github.com/JohanValero/TextZeroShotAPI.git
 ```
 > Nota: Se asume que has instalado git en el equipo.
 
-Para crear un repositorio git:
+Para crear un repositorio git debes ejecutar los siguientes comandos:
 ```
 git init
 git add .
