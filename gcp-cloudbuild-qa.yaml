@@ -9,7 +9,7 @@ steps:
       '-t',
       'app_clasificadora:$COMMIT_SHA',
       '-t',
-      'app_clasificadora:dev2qa'
+      'app_clasificadora:dev2qa',
       '.'
     ]
   # Renombra la imagen docker "app_clasificadora" al repositorio en

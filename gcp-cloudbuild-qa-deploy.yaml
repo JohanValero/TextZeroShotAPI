@@ -9,7 +9,7 @@ steps:
     entrypoint: gcloud
     args: [
       'run', 'deploy', 'app-clasificadora-qa',
-      '--image', 'us-central1-docker.pkg.dev/${PROJECT_ID}/app-clasificador-qa/app_clasificadora',
+      '--image', 'us-central1-docker.pkg.dev/${PROJECT_ID}/app-clasificador-qa/app_clasificadora:latest',
       '--region', 'us-central1',
       '--allow-unauthenticated'
     ]
