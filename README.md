@@ -170,6 +170,9 @@ Desplegar aplicaciones en la nube tiene varias ventajas:
 + Se ingresa en `Cloud Build`:
   + Se ingresa en `Activadores/Triggers` y se escoge una región.
   + Se crea un `activador` (disparador/trigger) nombrado "activador-qa-pull-request".
-    + Este activador se ejecutará cada vez que nuestro proyecto git se le asigne un pull request a la rama de "qa".
+    + Se recomienda activar "Solicitar aprobación antes de que se ejecute la compilación" si no se busca una automatización total.
+    + Se asigna el evento "Solicitud de extracción" para ejecutar durante el "pull request".
+    + Se asigna en "Rama base" el valor "^qa$", para activar la compilación automática durante los Pull request de la rama.
+    + Se asgina "Ubicación del archivo de configuración de Cloud Build" el valor de `gcp-cloudbuild-qa.yaml`.
 
 > Nota: Se recomienda usar la misma región para todos los despliegues en nube. Este tutorial por default fue hecho en "us-central1", si se cambia se deberá modificar los archivos `gcp-cloudbuild-qa.yaml` y `gcp-cloudbuild-prod.yaml`.
