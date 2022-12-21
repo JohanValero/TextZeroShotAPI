@@ -93,7 +93,7 @@ Tu puedes clonar este repositorio usando el comando:
 ```
 git clone https://github.com/JohanValero/TextZeroShotAPI.git
 ```
-> Nota: Se asume que has instalado git en el equipo.
+> Nota: Se asume que se ha instalado git en el equipo.
 
 Para crear un repositorio git debes ejecutar los siguientes comandos:
 ```
@@ -124,7 +124,7 @@ Desplegar aplicaciones en la nube tiene varias ventajas:
 + Agilidad: Desplegar aplicaciones en la nube permite a las empresas implementar y probar nuevas funcionalidades de forma más rápida y sencilla.
 + Flexibilidad: Las plataformas en la nube ofrecen una gran variedad de opciones de configuración y personalización, lo que permite a las empresas adaptar su infraestructura a sus necesidades específicas.
 
-## Desplegar de forma continua en Google Cloud Plataform (GCP).
+## Despliegue continuo en Google Cloud Plataform (GCP).
 
 + Se crea una cuenta en la nube de GCP.
   + Esta nube da la ventaja de ofrecer una capa gratuita diaria y/o mensual.
