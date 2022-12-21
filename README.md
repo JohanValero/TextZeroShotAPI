@@ -95,7 +95,8 @@ git clone https://github.com/JohanValero/TextZeroShotAPI.git
 ```
 > Nota: Se asume que se ha instalado git en el equipo.
 
-Para crear un repositorio git debes ejecutar los siguientes comandos:
+Para crear su propio repositorio git debes ejecutar los siguientes comandos, después de creado un proyecto Git:
+
 ```
 git init
 git add .
@@ -104,6 +105,20 @@ git branch -M main
 git remote add origin https://github.com/{GitUser}/{ProjectName}.git
 git push -u origin main
 ```
+En un proyecto de software que utiliza Git, es común utilizar varias ramas para organizar el código y el desarrollo. Algunas ramas que suelen utilizarse son:
++ Producción: es la rama principal del proyecto y contiene el código que se encuentra en producción. Es importante mantener esta rama estable y libre de errores, por lo que solo se deben realizar cambios cuidadosamente probados y validados.
++ Calidad: es una rama donde se realizan pruebas y validaciones antes de integrar el código a la rama de producción. Esta rama se utiliza para asegurar que el código cumpla con los estándares de calidad y no tenga errores.
++ Desarrollo: es una rama donde se integran y proban los cambios realizados por los desarrolladores. Esta rama se utiliza como un lugar de integración para validar que los cambios realizados por diferentes desarrolladores funcionen correctamente juntos.
++ Ramas de desarrollo por desarrollador o historia de usuario: son ramas creadas por los desarrolladores para trabajar en una historia de usuario o una tarea específica. Una vez que el trabajo está completo, estas ramas se integran a la rama de desarrollo para ser probadas y validadas.
+
+En resumen, esta estructura de ramas permite separar el código en diferentes etapas de desarrollo y validación, lo que facilita la colaboración entre los desarrolladores y mejora la calidad del código.
+
+Este proyecto tiene la siguiente estructura de ramas(branchs):
++ main: rama de producción.
+  + qa: rama de calidad.
+    + development: rama de desarrollo.
+      + dev-x: rama personal de desarrollo.
+
 ## ¿Qué es CI/CD?
 CI/CD (Continuous Integration / Continuous Deployment) es una práctica de desarrollo de software que se enfoca en automatizar y optimizar el proceso de integración y despliegue de código en entornos de producción.
 
@@ -135,5 +150,7 @@ Desplegar aplicaciones en la nube tiene varias ventajas:
   + Para más información leer: https://cloud.google.com/build/docs/deploying-builds/deploy-cloud-run
 + Crear un despliegue en Cloud Build:
   + Se ingresa en "Cloud Build" en GCP.
-  + Se ingresa en "Activadores/Triggers".
-  + Se crea un 
+  + Se ingresa en "Activadores/Triggers" y se escoge una región.
+  > Nota: Se recomienda usar la misma región para todos los despliegues en nube. Se requiere configuración adicional entre regiones.
+  + Se crea un activador(disparador/trigger) nombrado "activador-pull-request".
+    + Este activador se ejecutará cada vez que nuestro proyecto git se le asigne un pull request de la rama de "development".
