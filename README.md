@@ -77,6 +77,36 @@ Al crear el contenedor se puede consultar el API en:
 + Respuesta positiva: http://127.0.0.1:8000/?text=Esta%20es%20una%20empresa%20grandiosa
 + Respuesta negativa: http://127.0.0.1:8000/?text=Es%20mejor%20movistar
 
+## ¿Qué es repositorio de código?
+Un repositorio de código es un lugar donde se almacena y controla el código de un proyecto de software. Existen diferentes tipos de repositorios de código, como los repositorios de código fuente, que almacenan el código fuente de un proyecto, y los repositorios de binarios, que almacenan los archivos ejecutables o compilados de un proyecto.
+
+Los repositorios de código son útiles porque permiten controlar el cambio de código de forma centralizada y mantener un historial de las versiones del código. Esto hace que sea más fácil colaborar con otros desarrolladores, revertir cambios y resolver problemas. Además, los repositorios de código suelen incluir funcionalidades para realizar seguimiento de problemas, realizar seguimiento de tareas y hacer seguimiento de la actividad del proyecto.
+
+En resumen, los repositorios de código son herramientas esenciales para el desarrollo de software y ofrecen una serie de beneficios, como:
++ Facilitan la colaboración con otros desarrolladores.
++ Permiten controlar el cambio de código de forma centralizada.
++ Mantienen un historial de las versiones del código.
++ Incluyen funcionalidades para realizar seguimiento de problemas y tareas.
++ Ayudan a hacer seguimiento de la actividad del proyecto.
+
+Para crear un repositorio git:
+```
+git init
+git add .
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/{GitUser}/{ProjectName}.git
+git push -u origin main
+```
+## ¿Qué es CI/CD?
+CI/CD (Continuous Integration / Continuous Deployment) es una práctica de desarrollo de software que se enfoca en automatizar y optimizar el proceso de integración y despliegue de código en entornos de producción.
+
+La integración continua (CI, por sus siglas en inglés) se refiere al proceso de integrar y probar el código de manera constante y automatizada. Cada vez que un desarrollador realiza un cambio en el código, este cambio se integra con el código base y se ejecutan pruebas automatizadas para verificar que no haya ningún error. De esta manera, se pueden detectar problemas de forma temprana y solucionarlos antes de que el código se despliegue a entornos de producción.
+
+Por otro lado, el despliegue continuo (CD, por sus siglas en inglés) se refiere al proceso de desplegar el código de manera automatizada y frecuente a entornos de producción. En lugar de esperar a tener una versión completamente terminada del software para desplegarla, el proceso de CD permite desplegar cambios incrementales de forma constante. De esta manera, se pueden implementar mejoras y nuevas funcionalidades de forma más rápida y segura.
+
+En resumen, CI/CD es una práctica que busca automatizar y optimizar el proceso de integración y despliegue de código, lo que permite mejorar la calidad del software y reducir el tiempo de entrega de nuevas funcionalidades.
+
 ## ¿Qué es la nube?
 La nube es un término utilizado para describir la prestación de servicios de informática, como almacenamiento de datos, procesamiento de datos y aplicaciones a través de Internet en lugar de utilizar recursos informáticos locales. En lugar de tener que adquirir y mantener la infraestructura informática necesaria de forma local, las empresas pueden utilizar servicios de la nube proporcionados por proveedores de la nube como Amazon Web Services, Microsoft Azure o Google Cloud Platform. Esto permite a las empresas utilizar la infraestructura informática de la nube de forma flexible y ajustar su uso según sea necesario.
 
@@ -88,14 +118,16 @@ Desplegar aplicaciones en la nube tiene varias ventajas:
 + Agilidad: Desplegar aplicaciones en la nube permite a las empresas implementar y probar nuevas funcionalidades de forma más rápida y sencilla.
 + Flexibilidad: Las plataformas en la nube ofrecen una gran variedad de opciones de configuración y personalización, lo que permite a las empresas adaptar su infraestructura a sus necesidades específicas.
 
-## ¿Qué es CI/CD?
-CI/CD (Continuous Integration / Continuous Deployment) es una práctica de desarrollo de software que se enfoca en automatizar y optimizar el proceso de integración y despliegue de código en entornos de producción.
-
-La integración continua (CI, por sus siglas en inglés) se refiere al proceso de integrar y probar el código de manera constante y automatizada. Cada vez que un desarrollador realiza un cambio en el código, este cambio se integra con el código base y se ejecutan pruebas automatizadas para verificar que no haya ningún error. De esta manera, se pueden detectar problemas de forma temprana y solucionarlos antes de que el código se despliegue a entornos de producción.
-
-Por otro lado, el despliegue continuo (CD, por sus siglas en inglés) se refiere al proceso de desplegar el código de manera automatizada y frecuente a entornos de producción. En lugar de esperar a tener una versión completamente terminada del software para desplegarla, el proceso de CD permite desplegar cambios incrementales de forma constante. De esta manera, se pueden implementar mejoras y nuevas funcionalidades de forma más rápida y segura.
-
-En resumen, CI/CD es una práctica que busca automatizar y optimizar el proceso de integración y despliegue de código, lo que permite mejorar la calidad del software y reducir el tiempo de entrega de nuevas funcionalidades.
-
 ## Desplegar de forma continua en Google Cloud Plataform (GCP).
 
++ Se crea una cuenta en la nube de GCP.
+  + Esta nube da la ventaja de ofrecer una capa gratuita diaria y/o mensual.
+  + Para más información de como gestionar proyectos: https://cloud.google.com/resource-manager/docs/creating-managing-projects
++ Se activa el API de Cloud Build:
+  + La capa gratuita de GCP solo inicia su cobro después de 120 minutos de despliegue al día.
+  + El cobro es de USD 0.003 por mínuto / 4.32 USD por día (después de los 120 minutos de la capa gratuita).
+  + Para más información leer: https://cloud.google.com/build/docs/deploying-builds/deploy-cloud-run
++ Crear un despliegue en Cloud Build:
+  + Se ingresa en "Cloud Build" en GCP.
+  + Se ingresa en "Activadores/Triggers".
+  + Se crea un 
