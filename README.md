@@ -1,3 +1,5 @@
+# Objetivo del repositorio
+
 # TextZeroShotAPI
 Una aplicación de clasificación de texto en Python que utiliza la librería transformers y un modelo de lenguaje previamente entrenado llamado "Recognai/bert-base-spanish-wwm-cased-xnli" para clasificar reseñas como positivas o negativas. Que se despliega en despliegue continuo en Google Cloud Plataform (GCP).
 
@@ -144,13 +146,25 @@ Desplegar aplicaciones en la nube tiene varias ventajas:
 + Se crea una cuenta en la nube de GCP.
   + Esta nube da la ventaja de ofrecer una capa gratuita diaria y/o mensual.
   + Para más información de como gestionar proyectos: https://cloud.google.com/resource-manager/docs/creating-managing-projects
-+ Se activa el API de Cloud Build:
++ Se activa el API de `Cloud Build`:
   + La capa gratuita de GCP solo inicia su cobro después de 120 minutos de despliegue al día.
   + El cobro es de USD 0.003 por mínuto / 4.32 USD por día (después de los 120 minutos de la capa gratuita).
-  + Para más información leer: https://cloud.google.com/build/docs/deploying-builds/deploy-cloud-run
-+ Crear un despliegue en Cloud Build:
-  + Se ingresa en "Cloud Build" en GCP.
-  + Se ingresa en "Activadores/Triggers" y se escoge una región.
-  > Nota: Se recomienda usar la misma región para todos los despliegues en nube. Se requiere configuración adicional entre regiones.
-  + Se crea un activador(disparador/trigger) nombrado "activador-pull-request".
-    + Este activador se ejecutará cada vez que nuestro proyecto git se le asigne un pull request de la rama de "development".
+  + Para más información leer: https://cloud.google.com/build/docs
++ Se activa el API de `Artifac registry`:
+  + La capa gratuita de GCP solo inicia su cobro a partir de 0.5 Gigabyte (500 MB) al mes con un valor de 0.1 USD cada 500 MB.
+    + Una imagen Docker de 5 GB tiene un precio de 2 USD/mes.
+  + Para más información leer: https://cloud.google.com/artifact-registry/docs
++ Se activa el API de `Cloud Run`:
+  + La capa gratuita ofrece:
+    + Las primeras 5 horas de procesamiento.
+    + Las primeras 360.000 GiB de memoria ram por segundo.
+      + Si tu aplicación usa 500 MB de ram, entonces tienes 60 horas de memoria gratuitos.
+    + 2 millones de solicitudes gratutitas al mes.
+  + Para más información leer: https://cloud.google.com/run/docs
+
+### Crear un despliegue continuo en Cloud Build:
++ Se ingresa en `Cloud Build`.
++ Se ingresa en `Activadores/Triggers` y se escoge una región.
+> Nota: Se recomienda usar la misma región para todos los despliegues en nube. Se requiere configuración adicional entre regiones.
++ Se crea un `activador` (disparador/trigger) nombrado "activador-qa-pull-request".
+  + Este activador se ejecutará cada vez que nuestro proyecto git se le asigne un pull request de la rama de "qa".
