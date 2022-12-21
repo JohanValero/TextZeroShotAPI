@@ -1,4 +1,28 @@
 steps:
+  # Las siguientes 3 tareas utilizan el comando "docker" de GCP Cloud Builders.
+  # La primera tarea llama al comando "docker pull" para descargar una imagen de Docker del registro
+  # de GCP Container Registry.
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'pull',
+      'us-central1-docker.pkg.dev/${PROJECT_ID}/app-clasificador-qa/app_clasificadora:dev2qa'
+    ]
+  # Se llama al comando "docker image tag" para etiquetar la imagen descargada con un nuevo nombre.
+  # Este nuevo nombre tendra la etiqueta "latest" (más reciente) para el la nueva imagen Docker.
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'image',
+      'tag',
+      'us-central1-docker.pkg.dev/${PROJECT_ID}/app-clasificador-qa/app_clasificadora:dev2qa',
+      'us-central1-docker.pkg.dev/${PROJECT_ID}/app-clasificador-qa/app_clasificadora:latest'
+    ]
+  # Se llama al comando "docker push" para subir la imagen etiquetada al registro de GCP Container Registry.
+  # se sube al container registry la imagen más reciente de la imagen Docker.
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push',
+      'us-central1-docker.pkg.dev/${PROJECT_ID}/app-clasificador-qa/app_clasificadora:latest'
+    ]
   # Se desplegará la API en Cloud run en la región "us-central1".
   # La imagen de la aplicación se obtiene de la imagen previamente publicada.
   # El parámetro "--allow-unauthenticated" indica que la aplicación podrá ser
@@ -13,3 +37,7 @@ steps:
       '--region', 'us-central1',
       '--allow-unauthenticated'
     ]
+  # Nota: Este comando no es necesario en el futuro, ya que al usar la imagen docker "latest" al generar
+  # la instancia en Cloud Run automaticamente tomará la última publicada, pero garantiza que las imagenes
+  # en caché se renueven inmediatamente por la nueva versión.
+  # Adicionalmente, en caso de no existir el servicio en Cloud Run entonces lo genera automáticamente.
