@@ -1,7 +1,9 @@
 env/
 __pycache__/
+resources/
 .gitignore
 .dockerignore
 Dockerfile
 README.md
 gcp-cloudbuild-qa.yaml
+gcp-cloudbuild-qa-deploy.yaml
