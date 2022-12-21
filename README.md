@@ -89,6 +89,12 @@ En resumen, los repositorios de código son herramientas esenciales para el desa
 + Incluyen funcionalidades para realizar seguimiento de problemas y tareas.
 + Ayudan a hacer seguimiento de la actividad del proyecto.
 
+Tu puedes clonar este repositorio usando el comando:
+```
+git clone https://github.com/JohanValero/TextZeroShotAPI.git
+```
+> Nota: Se asume que has instalado git en el equipo.
+
 Para crear un repositorio git:
 ```
 git init
