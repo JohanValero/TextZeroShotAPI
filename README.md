@@ -177,7 +177,7 @@ Desplegar aplicaciones en la nube tiene varias ventajas:
     + Se asigna en "Rama base" el valor "^qa$", para activar la compilación automática durante los Pull request de la rama.
     + Se asgina "Ubicación del archivo de configuración de Cloud Build" el valor de `gcp-cloudbuild-qa.yaml`.
     + Al enviar un Pull request de la rama "Development" a la rama "qa" se generará el deploy automático:
-    + [![](https://url.jpg "Pull request en despliegue automático.")
-    + [![](https://url.jpg "Aprobación en Cloud Build.")
+    + ![](https://raw.githubusercontent.com/JohanValero/TextZeroShotAPI/development/resources/Pull%20request%20pendiente%20dev2qa.PNG "Pull request en despliegue automático.")
+    + ![](https://raw.githubusercontent.com/JohanValero/TextZeroShotAPI/development/resources/Pull%20request%20aprobaci%C3%B3n%20pendiente%20dev2qa.PNG "Aprobación en Cloud Build.")
 
 > Nota: Se recomienda usar la misma región para todos los despliegues en nube. Este tutorial por default fue hecho en "us-central1", si se cambia se deberá modificar los archivos `gcp-cloudbuild-qa.yaml` y `gcp-cloudbuild-prod.yaml`.
