@@ -1,4 +1,8 @@
 # TextZeroShotAPI
+Una aplicación de clasificación de texto en Python que utiliza la librería transformers y un modelo de lenguaje previamente entrenado llamado "Recognai/bert-base-spanish-wwm-cased-xnli" para clasificar reseñas como positivas o negativas. Que se despliega en despliegue continuo en Google Cloud Plataform (GCP).
+
+## Python
+
 
 ## ¿Qué es la nube?
 La nube es un término utilizado para describir la prestación de servicios de informática, como almacenamiento de datos, procesamiento de datos y aplicaciones a través de Internet en lugar de utilizar recursos informáticos locales. En lugar de tener que adquirir y mantener la infraestructura informática necesaria de forma local, las empresas pueden utilizar servicios de la nube proporcionados por proveedores de la nube como Amazon Web Services, Microsoft Azure o Google Cloud Platform. Esto permite a las empresas utilizar la infraestructura informática de la nube de forma flexible y ajustar su uso según sea necesario.
