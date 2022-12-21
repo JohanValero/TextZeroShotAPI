@@ -22,7 +22,7 @@ steps:
   # ${IMAGE_NAME} = Nombre de la imagen a guardar.
   # $COMMIT_SHA = Variable de entorno que indica el HASH identificador de la
   #   compilación. Sirve para identificar diferentes compilaciones. 
-  - name: ''
+  - name: 'gcr.io/cloud-builders/docker'
     args: [
       'image',
       'tag',
