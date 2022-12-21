@@ -146,15 +146,15 @@ Desplegar aplicaciones en la nube tiene varias ventajas:
 + Se crea una cuenta en la nube de GCP.
   + Esta nube da la ventaja de ofrecer una capa gratuita diaria y/o mensual.
   + Para más información de como gestionar proyectos: https://cloud.google.com/resource-manager/docs/creating-managing-projects
-+ Se activa el API de `Cloud Build`:
++ Activar el API de `Cloud Build`:
   + La capa gratuita de GCP solo inicia su cobro después de 120 minutos de despliegue al día.
   + El cobro es de USD 0.003 por mínuto / 4.32 USD por día (después de los 120 minutos de la capa gratuita).
   + Para más información leer: https://cloud.google.com/build/docs
-+ Se activa el API de `Artifac registry`:
++ Activar el API de `Artifac registry`:
   + La capa gratuita de GCP solo inicia su cobro a partir de 0.5 Gigabyte (500 MB) al mes con un valor de 0.1 USD cada 500 MB.
     + Una imagen Docker de 2.5 GB tiene un precio de 1 USD/mes.
   + Para más información leer: https://cloud.google.com/artifact-registry/docs
-+ Se activa el API de `Cloud Run`:
++ Activar el API de `Cloud Run`:
   + La capa gratuita ofrece:
     + Las primeras 5 horas de procesamiento.
     + Las primeras 360.000 GiB de memoria ram por segundo.
@@ -170,6 +170,9 @@ Desplegar aplicaciones en la nube tiene varias ventajas:
     + Se ingresa en Cloud Shell (CLI de gcloud) y se ejecuta el comando: `gcloud auth configure-docker us-central1-docker.pkg.dev`. Esto es necesario para configurar el auxiliar de credenciales para el dominio de Artifact Registry asociado a la ubicación de este repositorio.
       + Si no se realiza este paso, entonces no se publicarán las imagenes docker.
 + Se ingresa en `Cloud Build`:
+  + Se ingresa en `Configuración` y se habilita las opciones de:
+    + Cloud run, Administrador de cloud run.
+    + Cuentas de servicio, Usuario de cuenta servicio.
   + Se ingresa en `Activadores/Triggers` y se escoge una región.
   + Se crea un `activador` (disparador/trigger) nombrado "activador-qa-pull-request".
     + Se recomienda activar "Solicitar aprobación antes de que se ejecute la compilación" si no se busca una automatización total.
