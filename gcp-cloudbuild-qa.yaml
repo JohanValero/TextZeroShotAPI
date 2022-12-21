@@ -7,7 +7,9 @@ steps:
     args: [
       'build',
       '-t',
-      'app_clasificadora',
+      'app_clasificadora:$COMMIT_SHA',
+      '-t',
+      'app_clasificadora:dev2qa',
       '.'
     ]
   # Renombra la imagen docker "app_clasificadora" al repositorio en
@@ -26,8 +28,15 @@ steps:
     args: [
       'image',
       'tag',
-      'app_clasificadora',
+      'app_clasificadora:$COMMIT_SHA',
       'us-central1-docker.pkg.dev/${PROJECT_ID}/app-clasificador-qa/app_clasificadora:$COMMIT_SHA'
+    ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'image',
+      'tag',
+      'app_clasificadora:dev2qa',
+      'us-central1-docker.pkg.dev/${PROJECT_ID}/app-clasificador-qa/app_clasificadora:dev2qa'
     ]
   # PUSH = Enviar/Publicar
   # El comando "Docker push" se utiliza para publicar una imagen de Docker
@@ -40,5 +49,6 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: [
       'push',
-      'us-central1-docker.pkg.dev/${PROJECT_ID}/app-clasificador-qa/app_clasificadora:$COMMIT_SHA'
+      'us-central1-docker.pkg.dev/${PROJECT_ID}/app-clasificador-qa/app_clasificadora',
+      '--all-tags'
     ]
