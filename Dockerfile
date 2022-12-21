@@ -32,4 +32,4 @@ RUN python3 test_classifier.py
 # Establece el comando predeterminado para el contenedor. Este comando iniciará un
 # servidor web Gunicorn con un solo trabajador y ocho hilos, escuchando en el puerto
 # especificado por la variable de entorno $PORT y ejecutando la aplicación principal en el módulo "main".
-CMD exec gunicorn --workers=1 --threads=8 -b :$PORT main:app
+CMD exec gunicorn --workers=1 --threads=1 -b :$PORT main:app
