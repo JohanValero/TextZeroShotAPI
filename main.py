@@ -91,6 +91,7 @@ def clasifica_texto():
 if __name__ == "__main__":
     # Si no se proporciona un puerto, se usa el puerto 8000 por defecto.
     gPORT = gPORT if gPORT is not None else 8000
+    print("Development server running in port: ", gPORT)
     app.run(
         host = "0.0.0.0",
         port = gPORT,
