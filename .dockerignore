@@ -1,6 +1,7 @@
 env/
 __pycache__/
 resources/
+local_model_pretrained/
 .gitignore
 .dockerignore
 Dockerfile
