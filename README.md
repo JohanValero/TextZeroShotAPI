@@ -183,8 +183,23 @@ Desplegar aplicaciones en la nube tiene varias ventajas:
     + Se asigna el evento "Solicitud de extracción" para ejecutar durante el "pull request".
     + Se asigna en "Rama base" el valor "^qa$", para activar la compilación automática durante los Pull request de la rama.
     + Se asgina "Ubicación del archivo de configuración de Cloud Build" el valor de `gcp-cloudbuild-qa.yaml`.
+    + Se debe conectar el clodbuild al repositorio usando el GitAPI.
     + Al enviar un Pull request de la rama "Development" a la rama "qa" se generará el deploy automático:
-    + ![](https://raw.githubusercontent.com/JohanValero/TextZeroShotAPI/development/resources/Pull%20request%20pendiente%20dev2qa.PNG "Pull request en despliegue automático.")
-    + ![](https://raw.githubusercontent.com/JohanValero/TextZeroShotAPI/development/resources/Pull%20request%20aprobaci%C3%B3n%20pendiente%20dev2qa.PNG "Aprobación en Cloud Build.")
+    + Imagen de un pull request en proceso de pruebas.
+    ![](https://raw.githubusercontent.com/JohanValero/TextZeroShotAPI/development/resources/Pull%20request%20pendiente%20dev2qa.PNG "Pull request en despliegue automático.")
+    + Imagen de una aprobación de una compilación en Cloud Build.
+    ![](https://raw.githubusercontent.com/JohanValero/TextZeroShotAPI/development/resources/Pull%20request%20aprobaci%C3%B3n%20pendiente%20dev2qa.PNG "Aprobación en Cloud Build.")
+  + Se crea un `activador` (disparador/trigger) nombrado  "activador-qa-branch":
+    + Se recomienda activar "Solicitar aprobación antes de que se ejecute la compilación" si no se busca una automatización total.
+    + Se asigna el evento "Enviar una rama" para ejecutar durante el "push" a la rama de "qa".
+    + Se asgina "Ubicación del archivo de configuración de Cloud Build" el valor de `gcp-cloudbuild-qa-deploy.yaml`.
+    + Se debe conectar el clodbuild al repositorio usando el GitAPI.
+    + Al finalizar el proceso se generará un servicio QA donde probar el API generado.
+  + Se crea un `activador` (disparador/trigger) nombrado  "activador-qa-branch":
+    + Se recomienda activar "Solicitar aprobación antes de que se ejecute la compilación" si no se busca una automatización total.
+    + Se asigna el evento "Enviar una rama" para ejecutar durante el "push" a la rama de "main" (produción).
+    + Se asgina "Ubicación del archivo de configuración de Cloud Build" el valor de `gcp-cloudbuild-prod-deploy.yaml`.
+    + Se debe conectar el clodbuild al repositorio usando el GitAPI.
+    + Al finalizar el proceso se generará un servicio en producción donde probar el API generado.
 
-> Nota: Se recomienda usar la misma región para todos los despliegues en nube. Este tutorial por default fue hecho en "us-central1", si se cambia se deberá modificar los archivos `gcp-cloudbuild-qa.yaml` y `gcp-cloudbuild-prod.yaml`.
+> Nota: Se recomienda usar la misma región para todos los despliegues en nube. Este tutorial por default fue hecho en "us-central1", si se cambia se deberá modificar los archivos `gcp-cloudbuild-qa.yaml`, `gcp-cloudbuild-prod.yaml` y `gcp-cloudbuild-prod-deploy.yaml`.
