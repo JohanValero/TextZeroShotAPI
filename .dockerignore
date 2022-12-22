@@ -1,5 +1,10 @@
 env/
+__pycache__/
+resources/
+local_model_pretrained/
 .gitignore
 .dockerignore
 Dockerfile
 README.md
+gcp-cloudbuild-qa.yaml
+gcp-cloudbuild-qa-deploy.yaml

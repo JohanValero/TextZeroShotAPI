@@ -1,3 +1,5 @@
+# Objetivo del repositorio
+
 # TextZeroShotAPI
 Una aplicación de clasificación de texto en Python que utiliza la librería transformers y un modelo de lenguaje previamente entrenado llamado "Recognai/bert-base-spanish-wwm-cased-xnli" para clasificar reseñas como positivas o negativas. Que se despliega en despliegue continuo en Google Cloud Plataform (GCP).
 
@@ -59,19 +61,23 @@ Para instalar Docker en Windows, debes seguir los siguientes pasos:
 
 Para construir una imagen Docker a partir de un archivo Dockerfile y un conjunto de opciones adicionales.
 
-Ejecutar el siguiente comando:
+Ejecutar el siguiente comando para compilar la imagen docker:
 ```
-docker build -e PORT=8000 -p 8000:8000 -t app_clasificadora .
+docker build -t app_clasificadora .
 ```
-1. La opción "-e PORT=8000" establece una variable de entorno con el nombre "PORT" y el valor "8000" durante la construcción de la imagen. Esto permite utilizar el valor de la variable de entorno "PORT" en el Dockerfile para determinar en qué puerto escuchar la aplicación.
-
-2. La opción "-p 8000:8000" establece una regla de mapeo de puertos que expone el puerto 8000 del contenedor en el puerto 8000 del host. Esto permite acceder a la aplicación en el contenedor a través del puerto 8000 del host.
-
-3. La opción "-t app_clasificadora" le da un nombre a la imagen que se está construyendo. En este caso, la imagen se llamará "app_clasificadora".
+Ejecuta el siguiente comanda para iniciar un contenedor docker.
 ```
-docker run --name clasificador_texto app_clasificadora
+docker run --name clasificador_texto -e PORT=8000 -p 8000:8000 app_clasificadora
 ```
 Este código ejecuta un contenedor de Docker con el nombre "clasificador_texto" a partir de una imagen llamada "app_clasificadora". Al ejecutar este comando, se creará un contenedor nuevo y se iniciará a partir de la imagen especificada.
+
+1. La opción "--name clasificador_texto" nombra el contenedor para su facil reconocimiento.
+
+2. La opción "-e PORT=8000" establece una variable de entorno con el nombre "PORT" y el valor "8000" durante la construcción de la imagen. Esto permite utilizar el valor de la variable de entorno "PORT" en el Dockerfile para determinar en qué puerto escuchar la aplicación.
+
+3. La opción "-p 8000:8000" establece una regla de mapeo de puertos que expone el puerto 8000 del contenedor en el puerto 8000 del host. Esto permite acceder a la aplicación en el contenedor a través del puerto 8000 del host.
+
+4. La opción "-t app_clasificadora" le da un nombre a la imagen que se está construyendo. En este caso, la imagen se llamará "app_clasificadora".
 
 Al crear el contenedor se puede consultar el API en:
 + Respuesta positiva: http://127.0.0.1:8000/?text=Esta%20es%20una%20empresa%20grandiosa
@@ -95,7 +101,8 @@ git clone https://github.com/JohanValero/TextZeroShotAPI.git
 ```
 > Nota: Se asume que se ha instalado git en el equipo.
 
-Para crear un repositorio git debes ejecutar los siguientes comandos:
+Para crear su propio repositorio git debes ejecutar los siguientes comandos, después de creado un proyecto Git:
+
 ```
 git init
 git add .
@@ -104,6 +111,20 @@ git branch -M main
 git remote add origin https://github.com/{GitUser}/{ProjectName}.git
 git push -u origin main
 ```
+En un proyecto de software que utiliza Git, es común utilizar varias ramas para organizar el código y el desarrollo. Algunas ramas que suelen utilizarse son:
++ Producción: es la rama principal del proyecto y contiene el código que se encuentra en producción. Es importante mantener esta rama estable y libre de errores, por lo que solo se deben realizar cambios cuidadosamente probados y validados.
++ Calidad: es una rama donde se realizan pruebas y validaciones antes de integrar el código a la rama de producción. Esta rama se utiliza para asegurar que el código cumpla con los estándares de calidad y no tenga errores.
++ Desarrollo: es una rama donde se integran y proban los cambios realizados por los desarrolladores. Esta rama se utiliza como un lugar de integración para validar que los cambios realizados por diferentes desarrolladores funcionen correctamente juntos.
++ Ramas de desarrollo por desarrollador o historia de usuario: son ramas creadas por los desarrolladores para trabajar en una historia de usuario o una tarea específica. Una vez que el trabajo está completo, estas ramas se integran a la rama de desarrollo para ser probadas y validadas.
+
+En resumen, esta estructura de ramas permite separar el código en diferentes etapas de desarrollo y validación, lo que facilita la colaboración entre los desarrolladores y mejora la calidad del código.
+
+Este proyecto tiene la siguiente estructura de ramas(branchs):
++ main: rama de producción.
+  + qa: rama de calidad.
+    + development: rama de desarrollo.
+      + dev-x: rama personal de desarrollo.
+
 ## ¿Qué es CI/CD?
 CI/CD (Continuous Integration / Continuous Deployment) es una práctica de desarrollo de software que se enfoca en automatizar y optimizar el proceso de integración y despliegue de código en entornos de producción.
 
@@ -129,11 +150,56 @@ Desplegar aplicaciones en la nube tiene varias ventajas:
 + Se crea una cuenta en la nube de GCP.
   + Esta nube da la ventaja de ofrecer una capa gratuita diaria y/o mensual.
   + Para más información de como gestionar proyectos: https://cloud.google.com/resource-manager/docs/creating-managing-projects
-+ Se activa el API de Cloud Build:
++ Activar el API de `Cloud Build`:
   + La capa gratuita de GCP solo inicia su cobro después de 120 minutos de despliegue al día.
   + El cobro es de USD 0.003 por mínuto / 4.32 USD por día (después de los 120 minutos de la capa gratuita).
-  + Para más información leer: https://cloud.google.com/build/docs/deploying-builds/deploy-cloud-run
-+ Crear un despliegue en Cloud Build:
-  + Se ingresa en "Cloud Build" en GCP.
-  + Se ingresa en "Activadores/Triggers".
-  + Se crea un 
+  + Para más información leer: https://cloud.google.com/build/docs
++ Activar el API de `Artifac registry`:
+  + La capa gratuita de GCP solo inicia su cobro a partir de 0.5 Gigabyte (500 MB) al mes con un valor de 0.1 USD cada 500 MB.
+    + Una imagen Docker de 2.5 GB tiene un precio de 1 USD/mes.
+  + Para más información leer: https://cloud.google.com/artifact-registry/docs
++ Activar el API de `Cloud Run`:
+  + La capa gratuita ofrece:
+    + Las primeras 5 horas de procesamiento.
+    + Las primeras 360.000 GiB de memoria ram por segundo.
+      + Si tu aplicación usa 500 MB de ram, entonces tienes 60 horas de memoria gratuitos.
+    + 2 millones de solicitudes gratutitas al mes.
+  + Para más información leer: https://cloud.google.com/run/docs
+
+### Crear un despliegue continuo en Cloud Build:
++ Se ingresa en `Artifact Registry`:
+  + Se crean dos repositorios:
+    + Se crea el repositorio Docker "app-clasificador-qa".
+    + Se crea el repositorio Docker "app-clasificador-prod".
+    + Se ingresa en Cloud Shell (CLI de gcloud) y se ejecuta el comando: `gcloud auth configure-docker us-central1-docker.pkg.dev`. Esto es necesario para configurar el auxiliar de credenciales para el dominio de Artifact Registry asociado a la ubicación de este repositorio.
+      + Si no se realiza este paso, entonces no se publicarán las imagenes docker.
++ Se ingresa en `Cloud Build`:
+  + Se ingresa en `Configuración` y se habilita las opciones de:
+    + Cloud run, Administrador de cloud run.
+    + Cuentas de servicio, Usuario de cuenta servicio.
+  + Se ingresa en `Activadores/Triggers` y se escoge una región.
+  + Se crea un `activador` (disparador/trigger) nombrado "activador-qa-pull-request".
+    + Se recomienda activar "Solicitar aprobación antes de que se ejecute la compilación" si no se busca una automatización total.
+    + Se asigna el evento "Solicitud de extracción" para ejecutar durante el "pull request".
+    + Se asigna en "Rama base" el valor "^qa$", para activar la compilación automática durante los Pull request de la rama.
+    + Se asgina "Ubicación del archivo de configuración de Cloud Build" el valor de `gcp-cloudbuild-qa.yaml`.
+    + Se debe conectar el clodbuild al repositorio usando el GitAPI.
+    + Al enviar un Pull request de la rama "Development" a la rama "qa" se generará el deploy automático:
+    + Imagen de un pull request en proceso de pruebas.
+    ![](https://raw.githubusercontent.com/JohanValero/TextZeroShotAPI/development/resources/Pull%20request%20pendiente%20dev2qa.PNG "Pull request en despliegue automático.")
+    + Imagen de una aprobación de una compilación en Cloud Build.
+    ![](https://raw.githubusercontent.com/JohanValero/TextZeroShotAPI/development/resources/Pull%20request%20aprobaci%C3%B3n%20pendiente%20dev2qa.PNG "Aprobación en Cloud Build.")
+  + Se crea un `activador` (disparador/trigger) nombrado  "activador-qa-branch":
+    + Se recomienda activar "Solicitar aprobación antes de que se ejecute la compilación" si no se busca una automatización total.
+    + Se asigna el evento "Enviar una rama" para ejecutar durante el "push" a la rama de "qa".
+    + Se asgina "Ubicación del archivo de configuración de Cloud Build" el valor de `gcp-cloudbuild-qa-deploy.yaml`.
+    + Se debe conectar el clodbuild al repositorio usando el GitAPI.
+    + Al finalizar el proceso se generará un servicio QA donde probar el API generado.
+  + Se crea un `activador` (disparador/trigger) nombrado  "activador-qa-branch":
+    + Se recomienda activar "Solicitar aprobación antes de que se ejecute la compilación" si no se busca una automatización total.
+    + Se asigna el evento "Enviar una rama" para ejecutar durante el "push" a la rama de "main" (produción).
+    + Se asgina "Ubicación del archivo de configuración de Cloud Build" el valor de `gcp-cloudbuild-prod-deploy.yaml`.
+    + Se debe conectar el clodbuild al repositorio usando el GitAPI.
+    + Al finalizar el proceso se generará un servicio en producción donde probar el API generado.
+
+> Nota: Se recomienda usar la misma región para todos los despliegues en nube. Este tutorial por default fue hecho en "us-central1", si se cambia se deberá modificar los archivos `gcp-cloudbuild-qa.yaml`, `gcp-cloudbuild-prod.yaml` y `gcp-cloudbuild-prod-deploy.yaml`.

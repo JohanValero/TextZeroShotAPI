@@ -8,14 +8,7 @@ from flask import Flask, request, jsonify
 # procesamiento de lenguaje natural "transformers".
 from transformers import pipeline
 
-# Se carga el modelo machine learning para predecir
-# la categoría de una queja del call-center.
-# El modelo se basa en BERT y está preparado para procesar
-# texto en español.
-gClassifier = pipeline(
-    "zero-shot-classification", 
-    model = "Recognai/bert-base-spanish-wwm-cased-xnli"
-)
+gClassifier = None
 
 # Se definen las etiquetas candidatas para la clasificación.
 gCandidateLabels = ["insulto", "enojado", "negativo", "queja"]
@@ -24,6 +17,9 @@ gCandidateLabels = ["insulto", "enojado", "negativo", "queja"]
 # con el clasificador.
 gHypothesysTemplate = "Esta reseña es {}." 
 
+# Máxima calificación a ser otenida por una
+# evaluación de reseña.
+gMaxScore = 0.4
 
 # Se obtiene el valor del puerto a utilizar para la aplicación
 # web desde una variable de entorno.
@@ -37,12 +33,13 @@ app = Flask(__name__)
 # Se define una función para verificar si el texto de entrada
 # es considerado negativo por el clasificador.
 def verify_text(iInputText: str, iClassifier, iMinValue: float) -> bool:
+
     # Si el texto es vacío o nulo, se devuelve False.
     if (not iInputText) or len(iInputText) == 0:
         return False
     
     # Se ejecuta el clasificador con el texto de entrada.
-    vResult = gClassifier(
+    vResult = iClassifier(
         iInputText,
         candidate_labels = gCandidateLabels,
         hypothesis_template = gHypothesysTemplate
@@ -62,6 +59,14 @@ def verify_text(iInputText: str, iClassifier, iMinValue: float) -> bool:
 # método GET.
 @app.route('/', methods = ['GET'])
 def clasifica_texto():
+    # Se carga el modelo machine learning para predecir la categoría
+    # de una queja del call-center.
+    # El modelo se basa en BERT y está preparado para procesar
+    # texto en español.
+    global gClassifier
+    if gClassifier is None:
+        gClassifier = pipeline("zero-shot-classification", model = "./local_model_pretrained")
+    
     # Se obtiene el texto a clasificar desde el parámetro "text" de la petición.
     vInputText = request.args.get("text")
     
@@ -69,7 +74,7 @@ def clasifica_texto():
     vFlag = verify_text(
         vInputText,
         gClassifier,
-        0.4
+        gMaxScore
     )
     
     # Se construye la respuesta JSON.
@@ -86,6 +91,7 @@ def clasifica_texto():
 if __name__ == "__main__":
     # Si no se proporciona un puerto, se usa el puerto 8000 por defecto.
     gPORT = gPORT if gPORT is not None else 8000
+    print("Development server running in port: ", gPORT)
     app.run(
         host = "0.0.0.0",
         port = gPORT,

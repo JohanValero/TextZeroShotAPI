@@ -1,0 +1,60 @@
+steps:
+  # Construir la imagen de Docker para la aplicación clasificadora.
+  # Se usa el mismo comando 'docker build -t app_clasificadora .'
+  # En esta caso Cloud Build se le adiciona dos etiqueta a la imagen.
+  # $COMMIT_SHA: Variable de entorno que indica el HASH identificador de la
+  #   compilación. Sirve para identificar diferentes compilaciones y generar
+  #   un registro historico de compilaciones.
+  # dev2qa: Una etiqueta para identificar a la última compilación enviada
+  #   como un pull request a calidad.
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t',
+      'app_clasificadora:$COMMIT_SHA',
+      '-t',
+      'app_clasificadora:dev2qa',
+      '.'
+    ]
+  # Renombra la imagen docker "app_clasificadora" al repositorio en
+  # artifac-registry, el cual contiene el repositorio "app-clasificador-dev"
+  # y guarda la imagen "app_clasificador".
+  # La estructura de un repositorio artifac-registry es:
+  # ${region}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${IMAGE_NAME}[:$COMMIT_SHA]
+  # ${region} = us-central1
+  # ${PROJECT_ID} = Es una variable de entorno global de Cloud Build
+  #   del proyecto actual que ejecuta la compilación.
+  # ${REPOSITORY} = Folder repositorio creado en el artifact-registry.
+  # ${IMAGE_NAME} = Nombre de la imagen a guardar.
+  # $COMMIT_SHA = Variable de entorno que indica el HASH identificador de la
+  #   compilación. Sirve para identificar diferentes compilaciones. 
+  # dev2qa: Una etiqueta para identificar a la última compilación enviada
+  #   como un pull request a calidad.
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'image',
+      'tag',
+      'app_clasificadora:$COMMIT_SHA',
+      'us-central1-docker.pkg.dev/${PROJECT_ID}/app-clasificador-qa/app_clasificadora:$COMMIT_SHA'
+    ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'image',
+      'tag',
+      'app_clasificadora:dev2qa',
+      'us-central1-docker.pkg.dev/${PROJECT_ID}/app-clasificador-qa/app_clasificadora:dev2qa'
+    ]
+  # PUSH = Enviar/Publicar
+  # El comando "Docker push" se utiliza para publicar una imagen de Docker
+  # en un registro de contenedores.
+  # Un registro de contenedores es un servidor que almacena imágenes de Docker
+  # y las hace disponibles para su descarga e instalación.
+  # Al publicar una imagen de Docker en un registro de contenedores, estás haciendo
+  # que la imagen esté disponible para que las aplicaciones cloud descarguen la
+  # imagen y la utilicen en sus propios entornos.
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push',
+      'us-central1-docker.pkg.dev/${PROJECT_ID}/app-clasificador-qa/app_clasificadora',
+      '--all-tags'
+    ]
