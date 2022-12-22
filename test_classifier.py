@@ -13,12 +13,20 @@
 # Si el valor no es el esperado, se imprime un mensaje de error y la prueba unitaria se considera fallida.
 # Al final del código, se imprime el mensaje "Test finish OK." si ambas pruebas
 # unitarias se han completado exitosamente.
-from main import gClassifier, verify_text, gMaxScore
+from main import verify_text, gMaxScore
+from transformers import pipeline
+
+gClassifier = pipeline(
+    "zero-shot-classification", 
+    model = "Recognai/bert-base-spanish-wwm-cased-xnli"
+)
 
 vPositiveText = "Esta es una empresa grandiosa"
 assert verify_text(vPositiveText, gClassifier, gMaxScore) == False, "ERROR: Reseña positiva calificada como negativa."
 
 vNegativeText = "Es mejor movistar"
 assert verify_text(vNegativeText, gClassifier, gMaxScore) == True, "ERROR: Reseña negativa calificada como positiva."
+
+gClassifier.save_pretrained("./local_model_pretrained")
 
 print("Test finish OK.")

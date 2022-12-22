@@ -8,14 +8,7 @@ from flask import Flask, request, jsonify
 # procesamiento de lenguaje natural "transformers".
 from transformers import pipeline
 
-# Se carga el modelo machine learning para predecir
-# la categoría de una queja del call-center.
-# El modelo se basa en BERT y está preparado para procesar
-# texto en español.
-gClassifier = pipeline(
-    "zero-shot-classification", 
-    model = "Recognai/bert-base-spanish-wwm-cased-xnli"
-)
+gClassifier = None
 
 # Se definen las etiquetas candidatas para la clasificación.
 gCandidateLabels = ["insulto", "enojado", "negativo", "queja"]
@@ -40,12 +33,13 @@ app = Flask(__name__)
 # Se define una función para verificar si el texto de entrada
 # es considerado negativo por el clasificador.
 def verify_text(iInputText: str, iClassifier, iMinValue: float) -> bool:
+
     # Si el texto es vacío o nulo, se devuelve False.
     if (not iInputText) or len(iInputText) == 0:
         return False
     
     # Se ejecuta el clasificador con el texto de entrada.
-    vResult = gClassifier(
+    vResult = iClassifier(
         iInputText,
         candidate_labels = gCandidateLabels,
         hypothesis_template = gHypothesysTemplate
@@ -65,6 +59,14 @@ def verify_text(iInputText: str, iClassifier, iMinValue: float) -> bool:
 # método GET.
 @app.route('/', methods = ['GET'])
 def clasifica_texto():
+    # Se carga el modelo machine learning para predecir la categoría
+    # de una queja del call-center.
+    # El modelo se basa en BERT y está preparado para procesar
+    # texto en español.
+    global gClassifier
+    if gClassifier is None:
+        gClassifier = pipeline("zero-shot-classification", model = "./local_model_pretrained")
+    
     # Se obtiene el texto a clasificar desde el parámetro "text" de la petición.
     vInputText = request.args.get("text")
     

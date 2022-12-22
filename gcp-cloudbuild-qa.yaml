@@ -1,8 +1,12 @@
 steps:
   # Construir la imagen de Docker para la aplicación clasificadora.
   # Se usa el mismo comando 'docker build -t app_clasificadora .'
-  # En esta caso Cloud Build adiciona automáticamente los
-  # puertos y variables de entorno.
+  # En esta caso Cloud Build se le adiciona dos etiqueta a la imagen.
+  # $COMMIT_SHA: Variable de entorno que indica el HASH identificador de la
+  #   compilación. Sirve para identificar diferentes compilaciones y generar
+  #   un registro historico de compilaciones.
+  # dev2qa: Una etiqueta para identificar a la última compilación enviada
+  #   como un pull request a calidad.
   - name: 'gcr.io/cloud-builders/docker'
     args: [
       'build',
@@ -24,6 +28,8 @@ steps:
   # ${IMAGE_NAME} = Nombre de la imagen a guardar.
   # $COMMIT_SHA = Variable de entorno que indica el HASH identificador de la
   #   compilación. Sirve para identificar diferentes compilaciones. 
+  # dev2qa: Una etiqueta para identificar a la última compilación enviada
+  #   como un pull request a calidad.
   - name: 'gcr.io/cloud-builders/docker'
     args: [
       'image',

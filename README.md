@@ -61,19 +61,23 @@ Para instalar Docker en Windows, debes seguir los siguientes pasos:
 
 Para construir una imagen Docker a partir de un archivo Dockerfile y un conjunto de opciones adicionales.
 
-Ejecutar el siguiente comando:
+Ejecutar el siguiente comando para compilar la imagen docker:
 ```
-docker build -e PORT=8000 -p 8000:8000 -t app_clasificadora .
+docker build -t app_clasificadora .
 ```
-1. La opción "-e PORT=8000" establece una variable de entorno con el nombre "PORT" y el valor "8000" durante la construcción de la imagen. Esto permite utilizar el valor de la variable de entorno "PORT" en el Dockerfile para determinar en qué puerto escuchar la aplicación.
-
-2. La opción "-p 8000:8000" establece una regla de mapeo de puertos que expone el puerto 8000 del contenedor en el puerto 8000 del host. Esto permite acceder a la aplicación en el contenedor a través del puerto 8000 del host.
-
-3. La opción "-t app_clasificadora" le da un nombre a la imagen que se está construyendo. En este caso, la imagen se llamará "app_clasificadora".
+Ejecuta el siguiente comanda para iniciar un contenedor docker.
 ```
-docker run --name clasificador_texto app_clasificadora
+docker run --name clasificador_texto -e PORT=8000 -p 8000:8000 app_clasificadora
 ```
 Este código ejecuta un contenedor de Docker con el nombre "clasificador_texto" a partir de una imagen llamada "app_clasificadora". Al ejecutar este comando, se creará un contenedor nuevo y se iniciará a partir de la imagen especificada.
+
+1. La opción "--name clasificador_texto" nombra el contenedor para su facil reconocimiento.
+
+2. La opción "-e PORT=8000" establece una variable de entorno con el nombre "PORT" y el valor "8000" durante la construcción de la imagen. Esto permite utilizar el valor de la variable de entorno "PORT" en el Dockerfile para determinar en qué puerto escuchar la aplicación.
+
+3. La opción "-p 8000:8000" establece una regla de mapeo de puertos que expone el puerto 8000 del contenedor en el puerto 8000 del host. Esto permite acceder a la aplicación en el contenedor a través del puerto 8000 del host.
+
+4. La opción "-t app_clasificadora" le da un nombre a la imagen que se está construyendo. En este caso, la imagen se llamará "app_clasificadora".
 
 Al crear el contenedor se puede consultar el API en:
 + Respuesta positiva: http://127.0.0.1:8000/?text=Esta%20es%20una%20empresa%20grandiosa
