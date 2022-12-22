@@ -1,4 +1,16 @@
 # Objetivo del repositorio
+El objetivo de este repositorio es transferir el conocimiento necesario para publicar una API Restfull de un modelo predictivo en la nube para un uso serverless.
+
+El contenido de este documento es:
+- Python.
+- Docker.
+- ¿Qué es Git?
+- ¿Qué es CI/CD?
+- ¿Qué es la nube?
+  - Despliegue en Google Cloud Plataform (GCP) [completado].
+  - Despliegue en Amazon Web Services (AWS) [pendiente].
+  - Despliegue en Microsoft Azure (Azure) [pendiente].
+  - Despliegue en Oracle Cloud Infrastructure (OCI) [pendiente].
 
 # TextZeroShotAPI
 Una aplicación de clasificación de texto en Python que utiliza la librería transformers y un modelo de lenguaje previamente entrenado llamado "Recognai/bert-base-spanish-wwm-cased-xnli" para clasificar reseñas como positivas o negativas. Que se despliega en despliegue continuo en Google Cloud Plataform (GCP).
@@ -195,7 +207,7 @@ Desplegar aplicaciones en la nube tiene varias ventajas:
     + Se asgina "Ubicación del archivo de configuración de Cloud Build" el valor de `gcp-cloudbuild-qa-deploy.yaml`.
     + Se debe conectar el clodbuild al repositorio usando el GitAPI.
     + Al finalizar el proceso se generará un servicio QA donde probar el API generado.
-  + Se crea un `activador` (disparador/trigger) nombrado  "activador-qa-branch":
+  + Se crea un `activador` (disparador/trigger) nombrado  "activador-prod-branch":
     + Se recomienda activar "Solicitar aprobación antes de que se ejecute la compilación" si no se busca una automatización total.
     + Se asigna el evento "Enviar una rama" para ejecutar durante el "push" a la rama de "main" (produción).
     + Se asgina "Ubicación del archivo de configuración de Cloud Build" el valor de `gcp-cloudbuild-prod-deploy.yaml`.
