@@ -290,9 +290,9 @@ En resumen, la visualización de datos es una técnica fundamental en la industr
   + Reporte básico públicado:
     + https://datastudio.google.com/reporting/bbf8debb-e6f6-4305-af6b-3208db5ef3b9/page/ceABD
   + Vista de un reporte básico:
-    + ...
+    + ![](https://raw.githubusercontent.com/JohanValero/TextZeroShotAPI/development/resources/dashboard_1.PNG "Reporte básico")
   + Vista de interactuando con los datos de un reporte:
-    + ...
+    + ![](https://raw.githubusercontent.com/JohanValero/TextZeroShotAPI/development/resources/dashboard_2.PNG "Interactuando con el reporte")
 
 ## Modelos predictivos
 
