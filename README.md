@@ -36,6 +36,8 @@ Se ha generado un pequeño Dataset (conjunto de datos) pequeño de solo 1000 res
         },
       ]
 
+> Nota: Adicionalmente se realiza un ligero post-processing para cambiar \\\\" por \\" y el atributo JSON "valoración" por "valoracion". Para corregir caracteres especiales y remover acentos.
+
 ## Python
 Para instalar Python en Windows, primero debes descargar la versión adecuada de la página oficial de Python (https://www.python.org/downloads/). Asegúrate de elegir la versión de acuerdo a tu sistema operativo y las necesidades de tu proyecto. Una vez descargado, ejecuta el instalador y sigue las instrucciones en pantalla.
 > Nota: La instalación en sistemas unix tiene pasos distintos.
@@ -257,16 +259,34 @@ Desplegar aplicaciones en la nube tiene varias ventajas:
     + Se debe conectar el clodbuild al repositorio usando el GitAPI.
     + Al finalizar el proceso se generará un servicio en producción donde probar el API generado.
 + Se ingresa en `Cloud Storage`:
+  + La capa gratuita de GCP no contempla Cloud Storage:
+    + Los precios (almacenamiento estandar) son de 0,02 USD por 1 GB/mes, por lo tanto permite 50 GB por 1 USD al mes. 
   + Crear un nuevo bucket nombrado `bucket-analitica-qa`.
     + Crear el foder `data_json`:
       + Subir el archivo `comentarios-youtube.json` al bucket.
     + Crear el folder `data_csv`.
     + Agregar al bucket los permisos:
       + Al usuario "allUsers" adicionarle el permiso "allAuthenticatedUsers", esto permite que cualquier persona en internet pueda ver los archivos del Bucket.
+    > Nota: Si desea conectar el Bucket en local debe generar una clave para la cuenta de servicio y setear la variable de entorno: GOOGLE_APPLICATION_CREDENTIALS=./path_to_the_key.json
 
 > Nota: Se recomienda usar la misma región para todos los despliegues en nube. Este tutorial por default fue hecho en "us-central1", si se cambia se deberá modificar los archivos `gcp-cloudbuild-qa.yaml`, `gcp-cloudbuild-prod.yaml` y `gcp-cloudbuild-prod-deploy.yaml`.
 
 ## Visualización de datos
 
+La visualización de datos es una técnica utilizada para representar gráficamente los datos de manera que resulten fáciles de entender e interpretar. Esta técnica se ha vuelto cada vez más importante en la industria debido a la creciente cantidad de datos que generamos y al incremento de la necesidad de utilizar estos datos para tomar decisiones informadas.
+
+A continuación, se presentan algunas de las ventajas que ofrece la visualización de datos para las empresas:
+- Permite comprender los datos de manera rápida y sencilla: La visualización de datos permite representar gráficamente los datos de manera que sean fáciles de entender e interpretar, incluso para aquellas personas que no tienen un conocimiento profundo de la materia. Esto hace que sea más sencillo comprender los datos y extraer conclusiones de ellos.
+- Facilita la toma de decisiones: Al permitir comprender los datos de manera rápida y sencilla, la visualización de datos facilita la toma de decisiones basadas en datos. Esto puede ayudar a las empresas a tomar decisiones más informadas y a maximizar sus beneficios.
+- Ayuda a detectar patrones y tendencias: La visualización de datos permite detectar patrones y tendencias en los datos de manera rápida y sencilla. Esto puede ayudar a las empresas a anticipar el comportamiento del mercado y a tomar decisiones de inversión y marketing más efectivas.
+- Facilita la comunicación de resultados: La visualización de datos permite representar gráficamente los resultados de manera atractiva y fácil de entender. Esto hace que sea más sencillo comunicar los resultados a otros, ya sean clientes, inversores o compañeros de trabajo.
+
+En resumen, la visualización de datos es una técnica fundamental en la industria debido a su capacidad para hacer más sencillo el procesamiento y comprensión de los datos, facilitar la toma de decisiones y detectar patrones y tendencias. Por esta razón, cada vez más empresas están invirtiendo en herramientas y técnicas de visualización de datos para poder aprovechar al máximo el potencial de sus datos.
+
 + Se crea una cuenta nueva en Google Data Studio.
++ Subir el archivo "/resources/datos.csv" o ejecutar el API de Python públicado con la URL http://127.0.0.1:8000/process_json (si se configuró las variables de entorno) o el equivalente de la API en Cloud.
 + Se habilita la API de Google Storage en Google Data Studio.
+
+## Modelos predictivos
+
+...
