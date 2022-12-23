@@ -62,15 +62,18 @@ print("PORT:", gPORT)
 app = Flask(__name__)
 
 def verify_list(iList: list[str], iClassifier, iMinValue: float) -> list[bool]:
-    print("TYPE OF ARRAY: ", type(iList), ", TYPE [0]: ", type(iList[0]))
     vResult = iClassifier(
         iList,
         candidate_labels = gCandidateLabels,
         hypothesis_template = gHypothesysTemplate
     )
-    print(vResult)
-    return None
     
+    vResult = list(map(
+        lambda x:
+            True if max(x["scores"]) > iMinValue else False,
+        vResult
+    ))
+    return vResult
 
 # Se define una función para verificar si el texto de entrada
 # es considerado negativo por el clasificador.
@@ -89,13 +92,7 @@ def verify_text(iInputText: str, iClassifier, iMinValue: float) -> bool:
     
     # Se verifica si alguna de las puntuaciones obtenidas por
     # el clasificador es mayor al valor mínimo especificado.
-    for vScore in vResult['scores']:
-        if vScore > iMinValue:
-            return True
-    
-    # Si no se ha encontrado ninguna puntuación mayor al valor
-    # mínimo, se devuelve False.
-    return False
+    return max(vResult['scores']) > iMinValue
 
 # Obtiene los datos en formato JSON desde el bucket de Google Cloud Storage.
 def get_json():
@@ -116,9 +113,10 @@ def get_json():
     return vJSON_Data
 
 # Esta función recibe una lista de diccionarios y escribe cada uno de ellos en un archivo CSV.
-def write_csv(iJsonData : list[ dict[ str, any ] ] ) -> None:
+def write_csv(iJsonData : list[ dict[ str, any ] ], iMin : int, iMax : int) -> str:
+    vFileName : str = f"datos-{iMin:06d}-{iMax:06d}.csv"
     # Abre el archivo CSV en modo escritura
-    with open('datos.csv', 'w', encoding = 'UTF-8', newline='') as vFile:
+    with open(vFileName, 'w', encoding = 'UTF-8', newline='') as vFile:
         # Especifica los nombres de las columnas
         vFieldNames = [
             'valoracion',
@@ -129,7 +127,9 @@ def write_csv(iJsonData : list[ dict[ str, any ] ] ) -> None:
             'day',
             'month',
             'month_string',
-            'year'
+            'year',
+            'date_review',
+            'prediction'
         ]
         # Crea un objeto DictWriter para escribir el archivo CSV.
         vWriter = csv.DictWriter(vFile, fieldnames = vFieldNames)
@@ -137,9 +137,10 @@ def write_csv(iJsonData : list[ dict[ str, any ] ] ) -> None:
         vWriter.writeheader()
         # Escribe las filas restantes con los datos de cada diccionario.
         vWriter.writerows(iJsonData)
+    return vFileName
 
 # Esta función sube el archivo CSV al bucket de Google Cloud Storage
-def save_csv_in_bucket() -> None:
+def save_csv_in_bucket(iCsvFileName : str) -> None:
     # Crea un cliente de Google Cloud Storage.
     vClient = storage.Client()
     # Selecciona el bucket.
@@ -147,7 +148,7 @@ def save_csv_in_bucket() -> None:
     # Crea un blob en el bucket.
     vBlob = vBucket.blob(gCLOUD_BLOB_CSV)
     # Abre el archivo CSV en modo lectura binaria.
-    with open("datos.csv", 'rb') as vFile:
+    with open(iCsvFileName, 'rb') as vFile:
         # Sube el archivo al blob.
         vBlob.upload_from_file(vFile)
 
@@ -199,8 +200,25 @@ def clasifica_texto():
 # los resultados en un archivo CSV en un Bucket. 
 @app.route('/process_json')
 def process_json():
+    # Se obtiene el texto a clasificar desde el parámetro "text" de la petición.
+    vIndexMin = str(request.args.get("index_min"))
+    vIndexMax = str(request.args.get("index_max"))
+    
+    if  vIndexMin is None \
+    or  vIndexMax is None \
+    or  int(vIndexMin) < 0 \
+    or  int(vIndexMax) < 0:
+        vResult = {
+            "status": "error",
+            "error": "Invalid input index ["+ vIndexMin + ", " + vIndexMax + "]."
+        }
+        return jsonify(vResult)
+
+    vIndexMin = int(vIndexMin)
+    vIndexMax = int(vIndexMax)
+
     # Obtiene los datos del JSON.
-    vJSON_Data = get_json()
+    vJSON_Data = get_json()[vIndexMin : vIndexMax]
     
     # Se carga el modelo machine learning para predecir la categoría
     # de una queja del call-center.
@@ -211,8 +229,7 @@ def process_json():
         gClassifier = pipeline("zero-shot-classification", model = "./local_model_pretrained")
     
     vResult = list(map(lambda x: x["comentario"], vJSON_Data))
-    verify_list(vResult, gClassifier, gMaxScore)
-    #print(vResult[0])
+    vResult = verify_list(vResult, gClassifier, gMaxScore)
     
     # Recorre los datos del JSON y extrae información revelante.
     for i, vData in enumerate(vJSON_Data):
@@ -226,19 +243,16 @@ def process_json():
         vData["month"], vData["month_string"] = get_month(vData["fecha"])
         # Añade un campo al diccionario con el año extraído de la fecha.
         vData["year"] = int(vData["fecha"][-4:len(vData["fecha"])])
-        
-        #vData["prediction"] = verify_text(
-        #    vData["comentario"],
-        #    gClassifier,
-        #    gMaxScore
-        #)
-        #print("[" + str(i) + "/" + str(len(vJSON_Data)) + "] => " + str( 100*i/len(vJSON_Data) ), end="" )
+        # Convierte la fecha en formate DD/MM/YYYY
+        vData["date_review"] = f'{vData["day"]:02d}/{vData["month"]:02d}/{vData["year"]:04d}'
+        # Se asgina la predicción de la reseña del comentario.
+        vData["prediction"] = vResult[i]
     
     # Escribe los datos modificados en un archivo CSV
-    write_csv(vJSON_Data)
+    vCsvFileName = write_csv(vJSON_Data, vIndexMin, vIndexMax)
     
     # Guarda el archivo CSV en el bucket
-    save_csv_in_bucket()
+    save_csv_in_bucket(vCsvFileName)
     
     # Crea la respuesta JSON de la petición GET.
     vResult = {

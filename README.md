@@ -286,6 +286,13 @@ En resumen, la visualización de datos es una técnica fundamental en la industr
 + Se crea una cuenta nueva en Google Data Studio.
 + Subir el archivo "/resources/datos.csv" o ejecutar el API de Python públicado con la URL http://127.0.0.1:8000/process_json (si se configuró las variables de entorno) o el equivalente de la API en Cloud.
 + Se habilita la API de Google Storage en Google Data Studio.
++ Se genera los diferentes tableros en la hoja que permita interactuar con los datos:
+  + Reporte básico públicado:
+    + https://datastudio.google.com/reporting/bbf8debb-e6f6-4305-af6b-3208db5ef3b9/page/ceABD
+  + Vista de un reporte básico:
+    + ...
+  + Vista de interactuando con los datos de un reporte:
+    + ...
 
 ## Modelos predictivos
 
