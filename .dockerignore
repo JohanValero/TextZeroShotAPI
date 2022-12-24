@@ -8,3 +8,4 @@ Dockerfile
 README.md
 gcp-cloudbuild-qa.yaml
 gcp-cloudbuild-qa-deploy.yaml
+datos.csv

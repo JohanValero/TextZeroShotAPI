@@ -1,3 +1,4 @@
 env/
 __pycache__/
 local_model_pretrained/
+/datos-[0-9]*-[0-9]*.csv
