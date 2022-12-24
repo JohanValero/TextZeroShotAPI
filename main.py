@@ -61,13 +61,18 @@ print("PORT:", gPORT)
 # variable "app" como aplicación web.
 app = Flask(__name__)
 
+# Se define una función para verificar si una lista de texto
+# de entrada cuales son reseñas negativas por el clasificador.
 def verify_list(iList: list[str], iClassifier, iMinValue: float) -> list[bool]:
+    # Se ejecuta el clasificador con el texto de entrada.
     vResult = iClassifier(
         iList,
         candidate_labels = gCandidateLabels,
         hypothesis_template = gHypothesysTemplate
     )
     
+    # Se verifica si las puntuaciones obtenidas por el clasificador
+    # es mayor al valor mínimo especificado.
     vResult = list(map(
         lambda x:
             True if max(x["scores"]) > iMinValue else False,
@@ -114,6 +119,7 @@ def get_json():
 
 # Esta función recibe una lista de diccionarios y escribe cada uno de ellos en un archivo CSV.
 def write_csv(iJsonData : list[ dict[ str, any ] ], iMin : int, iMax : int) -> str:
+    # Genera el nombre archivo del archivo con formato "datos-000000-000000.csv".
     vFileName : str = f"datos-{iMin:06d}-{iMax:06d}.csv"
     # Abre el archivo CSV en modo escritura
     with open(vFileName, 'w', encoding = 'UTF-8', newline='') as vFile:
@@ -204,6 +210,7 @@ def process_json():
     vIndexMin = str(request.args.get("index_min"))
     vIndexMax = str(request.args.get("index_max"))
     
+    # Se verifica que los valores de índices sean válidos.
     if  vIndexMin is None \
     or  vIndexMax is None \
     or  int(vIndexMin) < 0 \
@@ -214,10 +221,11 @@ def process_json():
         }
         return jsonify(vResult)
 
+    # Convierte los índices en datos númericos válidos.
     vIndexMin = int(vIndexMin)
     vIndexMax = int(vIndexMax)
 
-    # Obtiene los datos del JSON.
+    # Obtiene los datos del JSON dentro del rango de índices.
     vJSON_Data = get_json()[vIndexMin : vIndexMax]
     
     # Se carga el modelo machine learning para predecir la categoría
@@ -228,6 +236,7 @@ def process_json():
     if gClassifier is None:
         gClassifier = pipeline("zero-shot-classification", model = "./local_model_pretrained")
     
+    # Obtiene una lista con las reseñas públicadas y obtiene su predicción.
     vResult = list(map(lambda x: x["comentario"], vJSON_Data))
     vResult = verify_list(vResult, gClassifier, gMaxScore)
     
@@ -248,10 +257,10 @@ def process_json():
         # Se asgina la predicción de la reseña del comentario.
         vData["prediction"] = vResult[i]
     
-    # Escribe los datos modificados en un archivo CSV
+    # Escribe los datos modificados en un archivo CSV y obtiene su nombre
     vCsvFileName = write_csv(vJSON_Data, vIndexMin, vIndexMax)
     
-    # Guarda el archivo CSV en el bucket
+    # Guarda el archivo CSV en el bucket.
     save_csv_in_bucket(vCsvFileName)
     
     # Crea la respuesta JSON de la petición GET.

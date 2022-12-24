@@ -293,7 +293,10 @@ En resumen, la visualización de datos es una técnica fundamental en la industr
     + ![](https://raw.githubusercontent.com/JohanValero/TextZeroShotAPI/development/resources/dashboard_1.PNG "Reporte básico")
   + Vista de interactuando con los datos de un reporte:
     + ![](https://raw.githubusercontent.com/JohanValero/TextZeroShotAPI/development/resources/dashboard_2.PNG "Interactuando con el reporte")
-
+  + Se puede concluir del reporte que las reseñas negativas mantienen una métrica de 50-70% de reseñas negativas con el paso del tiempo, por lo que puede ser una métrica confiable para ver la evolución de la App durante un periodo extensivo de tiempo que permita poner la meta de bajar las reseñas negativas a un mínimo del 60%.
+  > Nota: Se asume que este resultado no es creible, debido a que se realizó la prueba con un conjunto aleatorios de reseñas.
 ## Modelos predictivos
 
 ...
+
+> Nota: Para un correcto despliegue, y entrenamiento, se debe hacer uso de acceleradores graficos de Hardware (GPU) para optimizar la velocidad de ejecución de los modelos de Deep Learning; esto permite reducir procesos que toman más de un segundo a milisegundos, o más de un día de ejecución en solo minutos. No se hace uso de este concepto en este documento por el enfoque educativo de conceptos generales de Git, CI/CD, aplicación de analitica avanzada (modelos predictivos), Python, App restfull, plataforma serverless y visualización de datos.
